@@ -3,19 +3,23 @@ const Dev = require('../models/Dev')
 
 class DevController {
   async index(req, res) {
-    const { user } = req.headers
+    try {
+      const { user } = req.headers
 
-    const loggedDev = await Dev.findById(user)
+      const loggedDev = await Dev.findById(user)
 
-    const users = await Dev.find({
-      $and: [
-        { _id: { $ne: user } },
-        { _id: { $ne: loggedDev.likes } },
-        { _id: { $ne: loggedDev.dislikes } }
-      ]
-    })
+      const users = await Dev.find({
+        $and: [
+          { _id: { $ne: user } },
+          { _id: { $nin: loggedDev.likes } },
+          { _id: { $nin: loggedDev.dislikes } }
+        ]
+      })
 
-    return res.json(users)
+      return res.json(users)
+    } catch (error) {
+      return res.json(error)
+    }
   }
 
   async store(req, res) {
