@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const api = require('../services/api')
 const Dev = require('../models/Dev')
 
